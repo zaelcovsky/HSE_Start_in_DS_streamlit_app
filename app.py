@@ -31,7 +31,8 @@ st.markdown(
     ###  
     В приложении использован датасет [120 years of Olympic history: athletes and results](https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/data).   
     Датасет содержит информацию об атлетах, видах спорта и выигранных медалях с Олимпийских игр 1896-2016 гг. 
-    Приложение позволяет проанализировать количество выигранных атлетами медалей в разрезе страны, пола атлетов и вида медали (бронза, серебро, золото).
+    Приложение позволяет проанализировать количество выигранных атлетами медалей в разрезе страны, пола атлетов и вида медали (бронза, серебро, золото).  
+    Для построения графика выберите параметры на сайдбаре слева.
     """
 )
 
@@ -48,6 +49,8 @@ countries = st.sidebar.multiselect(
     'Выберите страну',
     athletes['Team'].unique()
 )
+if not countries:
+    countries = athletes['Team'].unique()
 
 # toggle widgets
 st.sidebar.markdown('<p class="custom-font">Выберите пол</p>', unsafe_allow_html=True)
@@ -63,6 +66,9 @@ sex_f = st.sidebar.toggle(
 )
 if sex_f:
     sex.append("F")
+
+if not sex_m and not sex_f:
+    sex = ["M", "F"]
 
 # checkbox widgets
 st.sidebar.markdown('<p class="custom-font">Выберите тип медали</p>', unsafe_allow_html=True)
@@ -84,6 +90,9 @@ medals_bronze = st.sidebar.checkbox(
 )
 if medals_bronze:
     medals.append("Bronze")
+
+if not medals_gold and not medals_silver and not medals_bronze:
+    medals = ["Gold", "Silver", "Bronze"]
 
 # Подзаголовок
 st.markdown(
@@ -136,4 +145,4 @@ if _button:
     st.pyplot(plt)
 
 else:
-    st.write('Выберите параметры для показа графика')
+    st.write('Выберите параметры для показа графика. Если какой-либо параметр не выбран, то берется вся выборка.')
